@@ -1,3 +1,4 @@
+from re import S
 import numpy
 import matplotlib.pyplot
 import random
@@ -10,7 +11,7 @@ def osc(nHz, time):
     # título 
     matplotlib.pyplot.title("Sinusoide")
 
-    wave = numpy.arange(SRATE*nHz, dtype=numpy.float32)
+    wave = numpy.arange(SRATE * nHz, dtype = numpy.float32)
     for i in range(len(wave)):
         wave[i] = numpy.sin(wave[i]/SRATE*(time*2*numpy.pi))
 
@@ -60,10 +61,32 @@ def modulaVol(sample, frec):
     for i in range(len(sample)):
         sample[i] *= frec[i]
 
-def fadeIn(sample,t):
-    secondWave = numpy.arange(t)
-    for i in t:
-        secondWave[i] /= t
+def fadeIn(sample, t):
+    if t < 0:
+        print("eres tonto >:(")
+        return
+
+    lastSample = round(SRATE * t) if round(SRATE * t) <= len(sample) else len(sample)
+
+    secondWave = numpy.ones(len(sample), dtype = numpy.float32) # array of ones
+    for i in range(lastSample):
+        secondWave[i] = i / lastSample
+
+    setGraphics(secondWave)
+    modulaVol(sample, secondWave)
+
+def fadeOut(sample, t):
+    if t < 0:
+        print("eres tonto >>>:(")
+        return
+
+    lastSample = round(SRATE * t) if round(SRATE * t) <= len(sample) else len(sample)
+
+    secondWave = numpy.ones(len(sample), dtype = numpy.float32) # array of ones
+    for i in range(lastSample):
+        secondWave[-i - 1] = i / lastSample
+
+    setGraphics(secondWave)
     modulaVol(sample, secondWave)
 
 # wave = square(3, 1)
@@ -75,14 +98,15 @@ def fadeIn(sample,t):
 
 fecuency = 1
 
-wave = osc(fecuency, 1)
+wave = osc(3, 1)
+fadeOut(wave, 1)
+# fadeIn(wave, 1)
+# secondWave = osc(2, 1)
 
-
-secondWave = osc(fecuency, 2)
-modulaVol(wave, secondWave)
+# modulaVol(wave, secondWave)
 
 setGraphics(wave)
-setGraphics(secondWave)
+# setGraphics(secondWave)
 
 # mostrar el resultado
 matplotlib.pyplot.show()
