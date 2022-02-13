@@ -1,56 +1,23 @@
 import numpy
 import matplotlib.pyplot
-import random
-import math
 
 SRATE = 44100.0
-# time = 2
-
-def osc(nHz, time):
-    # título 
-    matplotlib.pyplot.title("Sinusoide")
-
-    wave = numpy.arange(SRATE*nHz, dtype=numpy.float32)
-    for i in range(len(wave)):
-        wave[i] = numpy.sin(wave[i]/SRATE*(time*2*numpy.pi))
-
-    return wave
-
-def saw(nHz, time):
-    # título 
-    matplotlib.pyplot.title("Sierra")
-
-    wave = numpy.arange(SRATE*nHz, dtype=numpy.float32)
-    for i in range(len(wave)):
-        wave[i] = (2/numpy.pi) * numpy.arctan(numpy.tan(wave[i]/SRATE*(time*2*numpy.pi)/2))
-
-    return wave
-
-def square(nHz, time):
-        # título 
-    matplotlib.pyplot.title("Cuadrado")
-
-    wave = numpy.arange(SRATE*nHz, dtype=numpy.float32)
-    for i in range(len(wave)):
-        wave[i] = 1 if numpy.sin(wave[i]/SRATE*(time*2*numpy.pi)) > 0 else -1
-
-    return wave
-
-def triangle(nHz, time):
-        # título 
-    matplotlib.pyplot.title("Triangulo")
-
-    wave = numpy.arange(SRATE*nHz, dtype=numpy.float32)
-    for i in range(len(wave)):
-        wave[i] = (2/numpy.pi) * numpy.arcsin(numpy.sin(wave[i]/SRATE*(time*2*numpy.pi)))
-
-    return wave
+frequency = 3
 
 def setGraphics(wave):
     x = list(range(len(wave)))
-    y = [a for a in wave]
+    y = [sample for sample in wave]
 
     matplotlib.pyplot.plot(x, y)
+
+def osc(nHz, time):
+    wave = numpy.arange(SRATE * nHz, dtype = numpy.float32)
+    for i in range(len(wave)):
+        wave[i] = numpy.sin(wave[i]/SRATE*(time*2*numpy.pi))
+
+    matplotlib.pyplot.title("Sinusoide Generalizado") # título 
+
+    return wave
 
 def vol(sample, vol):
     for i in range(len(sample)):
@@ -60,29 +27,17 @@ def modulaVol(sample, frec):
     for i in range(len(sample)):
         sample[i] *= frec[i]
 
-def fadeIn(sample,t):
-    secondWave = numpy.arange(t)
-    for i in t:
-        secondWave[i] /= t
-    modulaVol(sample, secondWave)
-
-# wave = square(3, 1)
-# setGraphics(wave)
-# wave = triangle(3, 1)
-# setGraphics(wave)
-# wave = saw(3, 1)
-# setGraphics(wave)
-
-fecuency = 1
-
-wave = osc(fecuency, 1)
-
-
-secondWave = osc(fecuency, 2)
-modulaVol(wave, secondWave)
+wave = osc(frequency, 1)
 
 setGraphics(wave)
-setGraphics(secondWave)
+vol(wave, 0.5)
+setGraphics(wave)
 
-# mostrar el resultado
-matplotlib.pyplot.show()
+wave = osc(frequency, 1)
+oscWave = osc(frequency, 2)
+
+modulaVol(wave, oscWave)
+setGraphics(wave)
+setGraphics(oscWave)
+
+matplotlib.pyplot.show() # mostrar el resultado
