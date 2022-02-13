@@ -28,29 +28,29 @@ def fadeOut(sample, t):
 
     lastSample = round(SRATE * t) if round(SRATE * t) <= len(sample) else len(sample)
 
-    secondWave = numpy.ones(len(sample), dtype = numpy.float32) # array of ones
-    for i in range(lastSample):
-        secondWave[-i - 1] = i / lastSample # esto es terrible
+    oscWave = numpy.ones(len(sample), dtype = numpy.float32) # array of ones
+    for i in range(len(sample) - lastSample):
+        oscWave[-i - 1] = i / (len(sample) - lastSample) # esto es terrible
 
-    setGraphics(secondWave)
-    modulaVol(sample, secondWave)
+    setGraphics(oscWave)
+    modulaVol(sample, oscWave)
 
 def fadeIn(sample, t):
     if t < 0: return
 
     lastSample = round(SRATE * t) if round(SRATE * t) <= len(sample) else len(sample)
 
-    secondWave = numpy.ones(len(sample), dtype = numpy.float32) # array of ones
+    oscWave = numpy.ones(len(sample), dtype = numpy.float32) # array of ones
     for i in range(lastSample):
-        secondWave[i] = i / lastSample
+        oscWave[i] = i / lastSample
 
-    setGraphics(secondWave)
-    modulaVol(sample, secondWave)
+    setGraphics(oscWave)
+    modulaVol(sample, oscWave)
 
 wave = osc(3, 1)
 
 fadeOut(wave, 1)
-# fadeIn(wave, 1)
+fadeIn(wave, 1)
 
 setGraphics(wave)
 

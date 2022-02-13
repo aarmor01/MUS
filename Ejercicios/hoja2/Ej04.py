@@ -29,9 +29,9 @@ def modulaVol(sample, frec):
 
 wave = osc(frequency, 1)
 
-setGraphics(wave)
-vol(wave, 0.5)
-setGraphics(wave)
+# setGraphics(wave)
+# vol(wave, 0.5)
+# setGraphics(wave)
 
 wave = osc(frequency, 1)
 oscWave = osc(frequency, 2)
