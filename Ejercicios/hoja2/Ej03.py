@@ -12,7 +12,7 @@ def setGraphics(wave):
 def osc(nHz, time):
     wave = numpy.arange(SRATE * nHz, dtype = numpy.float32)
     for i in range(len(wave)):
-        wave[i] = numpy.sin(wave[i]/SRATE*(time*2*numpy.pi))
+        wave[i] = numpy.sin(wave[i] / SRATE * (time * 2 * numpy.pi))
 
     matplotlib.pyplot.title("Sinusoide Generalizado") # título 
 

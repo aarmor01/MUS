@@ -2,7 +2,6 @@ import numpy
 import matplotlib.pyplot
 
 SRATE = 44100.0
-frequency = 3
 
 def setGraphics(wave):
     x = list(range(len(wave)))
@@ -27,6 +26,7 @@ def modulaVol(sample, frec):
     for i in range(len(sample)):
         sample[i] *= frec[i]
 
+frequency = 3
 wave = osc(frequency, 1)
 
 # setGraphics(wave)
