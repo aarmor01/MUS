@@ -7,7 +7,7 @@ from format_tools import *
 
 # abrimos wav y recogemos frecMuestreo y array de datos
 #fs, data = wavfile.read('../0_basics/expousure.wav')
-SRATE, data = wavfile.read('ex1.wav')
+SRATE, data = wavfile.read('piano.wav')
 
 data = toFloat32(data)
 
