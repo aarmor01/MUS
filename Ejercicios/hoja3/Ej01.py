@@ -1,13 +1,12 @@
 # 1_numPy/playNumPyVol.py reproductor con control de volumen
-from msilib.schema import FeatureComponents
-import pyaudio, kbhit
-#from Ejercicios.hoja2.Ej04 import SRATE
-from scipy.io import wavfile # para manejo de wavs
 import numpy as np  # arrays    
+import sounddevice as sd   # modulo de conexión con portAudio
+import soundfile as sf     # para lectura/escritura de wavs
+import kbhit
 from format_tools import *
 
 SRATE = 44100
-CHUNK = 1024
+CHUNK = 2048
 frec = 440
 
 class Osc:
@@ -17,7 +16,6 @@ class Osc:
 
     def changeFrec(self, frec):
         self.frec = frec
-
     def next(self):
         chunkWave = np.arange(CHUNK, dtype = np.float32)
 
@@ -39,15 +37,12 @@ bloque = np.arange(CHUNK, dtype = np.float32)
 # print("Num channels: ", len(data.shape))
 # print("Len ", data.shape[0])
 
-# arrancamos pyAudio
-p = pyaudio.PyAudio()
+# arrancamos sounddevice
+stream = sd.OutputStream(samplerate=SRATE, 
+    blocksize=CHUNK,
+    channels=len(bloque.shape))
 
-stream = p.open(format=p.get_format_from_width(getWidthData(bloque)),
-                channels=len(bloque.shape),
-                rate=SRATE,
-                frames_per_buffer=CHUNK,
-                output=True)
-
+stream.start()
 
 # En data tenemos el wav completo, ahora procesamos por bloques (chunks)
 kb = kbhit.KBHit()
@@ -55,7 +50,6 @@ osc = Osc(frec)
 numBloque = 0
 c = ' '
 
-# vol = 1.0
 while c != 'q': 
     # nuevo bloque 
     bloque = osc.next() 
@@ -63,23 +57,17 @@ while c != 'q':
     # modificación del volumen: multiplicacion de todas las muestras * vol
     # bloque = bloque*frec/SRATE
 
-    # ojo: esta operación convierte el dtype de bloque a 'float64'      
-    # esto es incorrecto: stream.write(bloque.tobytes())         
-    # -> para lanzarlo al stream de salida hay que hacer conversion con "astype"
-
-    stream.write(bloque.astype(bloque.dtype).tobytes())        
+    stream.write(bloque)        
     
     if kb.kbhit():
         c = kb.getch()
-        if (c=='f'): frec= max(220,frec-0.5)
-        elif (c=='F'): frec= min(880,frec+0.5)
-        print("Frec: ",frec)
+        if (c=='f'): frec = max(220, frec - 0.5)
+        elif (c=='F'): frec = min(880, frec + 0.5)
+        print("Frec: ", frec)
 
     osc.changeFrec(frec)
 
     numBloque += 1
 
 kb.set_normal_term()        
-stream.stop_stream()
-stream.close()
-p.terminate()
+stream.stop()
