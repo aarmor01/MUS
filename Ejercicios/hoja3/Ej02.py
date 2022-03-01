@@ -1,12 +1,10 @@
-from msilib.schema import FeatureComponents
 import kbhit
 import sounddevice as sd
 import soundfile as sf
-from scipy.io import wavfile # para manejo de wavs
-#from scipy import signal
+# from scipy.io import wavfile # para manejo de wavs
+# from scipy import signal
 import numpy as np  # arrays    
 import matplotlib.pyplot as plt
-from format_tools import *
 
 SRATE = 44100
 CHUNK = 1024

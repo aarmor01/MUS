@@ -6,7 +6,6 @@ from scipy.io import wavfile # para manejo de wavs
 #from scipy import signal
 import numpy as np  # arrays    
 import matplotlib.pyplot as plt
-from format_tools import *
 
 # SRATE = 44100
 CHUNK = 2048
@@ -21,8 +20,6 @@ def setGraphics(wave):
     plt.plot(x, y)
 
 data, SRATE = sf.read('piano2.wav')
-
-data = toFloat32(data)
 
 # abrimos stream
 stream = sd.OutputStream(samplerate=SRATE, 

@@ -8,7 +8,6 @@ CHUNK = 2048
 CHANNELS = 1
 SRATE = 44100
 
-
 # buffer para acumular grabación.
 # (0,1): con un canal (1), vacio (de tamaño 0)
 buffer = np.empty((0, 1), dtype="float32")
@@ -16,11 +15,8 @@ def callback(indata, frames, time, status):
     global buffer
     buffer = np.append(buffer,indata)
 
-
-
 # stream de entrada con callBack
-stream = sd.InputStream(
-    samplerate=SRATE, dtype="float32",
+stream = sd.InputStream( samplerate=SRATE, dtype="float32",
     channels=CHANNELS,
     blocksize=CHUNK, 
     callback=callback)

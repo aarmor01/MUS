@@ -1,29 +1,27 @@
 import kbhit
 import sounddevice as sd
 import soundfile as sf
-from scipy.io import wavfile # para manejo de wavs
-#from scipy import signal
+# from scipy.io import wavfile # para manejo de wavs
+# from scipy import signal
 import numpy as np  # arrays    
 import matplotlib.pyplot as plt
-from format_tools import *
 
-# SRATE = 44100
+SRATE = 44100
 CHUNK = 2048
 STDFREC = 440
 MODFREC = 27.5
 
 class Delay:
-    def __init__(self, rT):
-        self.retTime = rT
-        self.buf = np.zeros(rT)
+    def __init__(self, dT):
+        self.delayTime = dT
+        self.buf = np.zeros(dT * SRATE)
 
-    def processChunk(self, audioChunk):  
-        audSlice = self.buf[:CHUNK] 
+    def extractChunk(self):  
+        return self.buf[:CHUNK]
 
-        self.buf = np.append(self.buf, audioChunk)
-        self.buf = np.delete(self.buf, CHUNK)
-        
-        return audSlice
+    def processChunk(self, audioChunk):
+        self.buf = np.delete(self.buf, np.s_[:CHUNK], axis = 0)
+        self.buf = np.append(self.buf, audioChunk, axis = 0)
 
 # Muestra matplotlib
 def setGraphics(wave):
@@ -33,8 +31,6 @@ def setGraphics(wave):
     plt.plot(x, y)
 
 data, SRATE = sf.read('piano.wav')
-
-data = toFloat32(data)
 
 # abrimos stream
 stream = sd.OutputStream(samplerate=SRATE, 
@@ -49,20 +45,20 @@ kb = kbhit.KBHit()
 numBloque = 0
 c = ' '
 
-print ('culodemono')
 delay = Delay(1)
 
 vol = 1.0
 while c != 'q': 
+    print('.')
      # numero de samples a procesar: CHUNK si quedan y si no, los que queden
     nSamples = min(CHUNK, data.shape[0] - (numBloque + 1) * CHUNK)
 
     # nuevo bloque
     bloque = data[numBloque * CHUNK : numBloque * CHUNK + nSamples]
 
-    stream.write(np.float32(delay.processChunk(bloque)))        
+    stream.write(np.float32(delay.extractChunk()))
     
-    print('.')
+    delay.processChunk(bloque)
 
     if kb.kbhit():
         c = kb.getch()

@@ -1,9 +1,7 @@
-from msilib.schema import FeatureComponents
 import sounddevice as sd
 import soundfile as sf
 #from scipy import signal
 import numpy as np  # arrays    
-from format_tools import *
 
 SRATE = 44100
 

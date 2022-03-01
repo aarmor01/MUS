@@ -3,7 +3,6 @@ import numpy as np  # arrays
 import sounddevice as sd   # modulo de conexión con portAudio
 import soundfile as sf     # para lectura/escritura de wavs
 import kbhit
-from format_tools import *
 
 SRATE = 44100
 CHUNK = 2048

@@ -31,12 +31,20 @@ kb = kbhit.KBHit()
 numBloque = int(math.ceil(len(data) / CHUNK))
 c = ' '
 
+newRate = SRATE * 1.2
+newSRate = bool(0)
 while c != 'q': 
       # numero de samples a procesar: CHUNK si quedan y si no, los que queden
     nSamples = min(CHUNK, data.shape[0] - (numBloque + 1) * CHUNK)
 
     # nuevo bloque
     bloque = data[numBloque * CHUNK : numBloque * CHUNK + nSamples]
+
+    if newSRate:
+        newSRate = bool(1)
+        stream = sd.OutputStream(samplerate=newRate, 
+                    blocksize=CHUNK,
+                    channels=len(data.shape))
 
     if len(bloque) == 0:
         stream.write(np.float32(bloque))
@@ -45,7 +53,14 @@ while c != 'q':
 
     if kb.kbhit():
         c = kb.getch()
-        if (c=='f'): numBloque = 0
+        if (c=='f'):
+            newRate = SRATE * 1.2
+            newSRate = bool(1)
+            numBloque = 0
+        if (c=='g'):
+            newRate = SRATE * 1.2
+            newSRate = bool(1)
+            numBloque = 0
 
 
 # setGraphics(bloque)
