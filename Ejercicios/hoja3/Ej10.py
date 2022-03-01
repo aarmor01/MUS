@@ -1,17 +1,17 @@
-# basic/record0.py Grabacion de un archivo de audio 'q' para terminar
 import numpy as np         # arrays    
 import sounddevice as sd   # modulo de conexión con portAudio
 import soundfile as sf     # para lectura/escritura de wavs
 import kbhit               # para lectura de teclas no bloqueante
 
-CHUNK = 2048
 CHANNELS = 1
-SRATE = 44100
+CHUNK = 2048
+SRATE = 44100.0
 
 class Delay:
     def __init__(self, dT):
         self.delayTime = dT
-        self.buf = np.zeros(dT * SRATE)
+        self.buf = np.zeros(int(round(dT * SRATE)))
+        print(int(round(dT * SRATE)))
 
     def extractChunk(self):  
         outputChunk = self.buf[:CHUNK]
@@ -23,46 +23,38 @@ class Delay:
     def processChunk(self, audioChunk):
         self.buf = np.append(self.buf, audioChunk, axis = 0)
 
-# buffer para acumular grabación.
-# (0,1): con un canal (1), vacio (de tamaño 0)
-# buffer = np.empty((0, 1), dtype="float32")
-delay = Delay(1)
-def callback(indata, frames, time, status):
+delayTime = -1.0
+while delayTime < 0 or delayTime > 1:
+    print("Inserte delay (mayor que 0.0 y 1.0 [poner con este formato]): ", end='')
+    delayTime = float(input())
+
+delay = Delay(delayTime)
+def callback(indata, outdata, frames, time, status):
     global delay
-    delay.processChunk(indata);
+    delay.processChunk(np.copy(indata[:, 0]))
+    outdata[:, 0] = delay.extractChunk()
 
 
 # stream de entrada con callBack
-stream = sd.InputStream( samplerate=SRATE, dtype="float32",
+stream = sd.Stream(samplerate=SRATE,
+    dtype="float32",
     channels=CHANNELS,
     blocksize=CHUNK, 
     callback=callback)
 
 
-streamOut = sd.OutputStream(samplerate=SRATE, 
-    blocksize=CHUNK,
-    channels=CHANNELS)
-
 # arrancamos stream
 stream.start()
-streamOut.start()
-
 
 # bucle para grabacion 
 kb = kbhit.KBHit()
 c = ' '
-numBloque = 0
 
 while c != 'q': 
-    print('.')
-
-    streamOut.write(np.float32(delay.extractChunk()))
-
     if kb.kbhit():
         c = kb.getch()
 
 
 stream.stop() 
-streamOut.stop() 
 
 kb.set_normal_term()

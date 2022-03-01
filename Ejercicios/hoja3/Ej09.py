@@ -1,22 +1,12 @@
 import kbhit
 import sounddevice as sd
 import soundfile as sf
-# from scipy.io import wavfile # para manejo de wavs
-# from scipy import signal
 import numpy as np  # arrays    
-import matplotlib.pyplot as plt
 
 SRATE = 44100
 CHUNK = 2048
 STDFREC = 440
 MODFREC = 27.5
-
-# Muestra matplotlib
-def setGraphics(wave):
-    x = list(range(len(wave)))
-    y = [sample for sample in wave]
-
-    plt.plot(x, y)
 
 class Delay:
     def __init__(self, dT):

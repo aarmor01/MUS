@@ -37,6 +37,5 @@ while len(part) > songIndex:
     songIndex +=1
     stream.write(np.float32(wave))       
        
-kb.set_normal_term()        
 stream.stop()
 exit()
