@@ -1,26 +1,11 @@
 import kbhit
 import sounddevice as sd
 import soundfile as sf
-import numpy as np  
-import matplotlib.pyplot as plt
-import math
-
-SRATE = 44100
-CHUNK = 1024
-STDFREC = 440
-
-# Muestra matplotlib
-def setGraphics(wave):
-    x = list(range(len(wave)))
-    y = [sample for sample in wave]
-
-    plt.plot(x, y)
 
 data, SRATE = sf.read('piano.wav')
 
 # abrimos stream
 stream = sd.OutputStream(samplerate=SRATE, 
-    blocksize=CHUNK,
     channels=len(data.shape))
 
 # arrancamos stream
@@ -28,43 +13,29 @@ stream.start()
 
 # En data tenemos el wav completo, ahora procesamos por bloques (chunks)
 kb = kbhit.KBHit()
-numBloque = int(math.ceil(len(data) / CHUNK))
 c = ' '
 
-newRate = SRATE * 1.2
-newSRate = bool(0)
-while c != 'q': 
-      # numero de samples a procesar: CHUNK si quedan y si no, los que queden
-    nSamples = min(CHUNK, data.shape[0] - (numBloque + 1) * CHUNK)
+scale = [1.0, 1.12, 1.25, 1.33, 1.5, 1.69, 1.88]
+high = [2.0, 2.24, 2.51, 2.66, 2.99, 3.36, 3.78, 4]
 
-    # nuevo bloque
-    bloque = data[numBloque * CHUNK : numBloque * CHUNK + nSamples]
-
-    if newSRate:
-        newSRate = bool(1)
-        stream = sd.OutputStream(samplerate=newRate, 
-                    blocksize=CHUNK,
-                    channels=len(data.shape))
-
-    if len(bloque) == 0:
-        stream.write(np.float32(bloque))
-
-    numBloque += 1
-
+while c != '1': 
     if kb.kbhit():
         c = kb.getch()
-        if (c=='f'):
-            newRate = SRATE * 1.2
-            newSRate = bool(1)
-            numBloque = 0
-        if (c=='g'):
-            newRate = SRATE * 1.2
-            newSRate = bool(1)
-            numBloque = 0
-
-
-# setGraphics(bloque)
-# plt.show()
+        if (c=='q'): sd.play(data, SRATE * scale[0])
+        elif (c=='w'): sd.play(data, SRATE * scale[1])
+        elif (c=='e'): sd.play(data, SRATE * scale[2])
+        elif (c=='r'): sd.play(data, SRATE * scale[3])
+        elif (c=='t'): sd.play(data, SRATE * scale[4])
+        elif (c=='y'): sd.play(data, SRATE * scale[5])
+        elif (c=='u'): sd.play(data, SRATE * scale[6])
+        elif (c=='z'): sd.play(data, SRATE * high[0])
+        elif (c=='x'): sd.play(data, SRATE * high[1])
+        elif (c=='c'): sd.play(data, SRATE * high[2])
+        elif (c=='v'): sd.play(data, SRATE * high[3])
+        elif (c=='b'): sd.play(data, SRATE * high[4])
+        elif (c=='n'): sd.play(data, SRATE * high[5])
+        elif (c=='m'): sd.play(data, SRATE * high[6])
+        elif (c==','): sd.play(data, SRATE * high[7])
 
 kb.set_normal_term()        
 stream.stop()
