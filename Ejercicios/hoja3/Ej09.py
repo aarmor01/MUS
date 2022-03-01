@@ -1,0 +1,82 @@
+import kbhit
+import sounddevice as sd
+import soundfile as sf
+from scipy.io import wavfile # para manejo de wavs
+#from scipy import signal
+import numpy as np  # arrays    
+import matplotlib.pyplot as plt
+from format_tools import *
+
+# SRATE = 44100
+CHUNK = 2048
+STDFREC = 440
+MODFREC = 27.5
+
+class Delay:
+    def __init__(self, rT):
+        self.retTime = rT
+        self.buf = np.zeros(rT)
+
+    def processChunk(self, audioChunk):  
+        audSlice = self.buf[:CHUNK] 
+
+        self.buf = np.append(self.buf, audioChunk)
+        self.buf = np.delete(self.buf, CHUNK)
+        
+        return audSlice
+
+# Muestra matplotlib
+def setGraphics(wave):
+    x = list(range(len(wave)))
+    y = [sample for sample in wave]
+
+    plt.plot(x, y)
+
+data, SRATE = sf.read('piano.wav')
+
+data = toFloat32(data)
+
+# abrimos stream
+stream = sd.OutputStream(samplerate=SRATE, 
+    blocksize=CHUNK,
+    channels=len(data.shape))
+
+# arrancamos stream
+stream.start()
+
+# En data tenemos el wav completo, ahora procesamos por bloques (chunks)
+kb = kbhit.KBHit()
+numBloque = 0
+c = ' '
+
+print ('culodemono')
+delay = Delay(1)
+
+vol = 1.0
+while c != 'q': 
+     # numero de samples a procesar: CHUNK si quedan y si no, los que queden
+    nSamples = min(CHUNK, data.shape[0] - (numBloque + 1) * CHUNK)
+
+    # nuevo bloque
+    bloque = data[numBloque * CHUNK : numBloque * CHUNK + nSamples]
+
+    stream.write(np.float32(delay.processChunk(bloque)))        
+    
+    print('.')
+
+    if kb.kbhit():
+        c = kb.getch()
+    #     if (c=='f'): STDFREC = max(220, STDFREC - 0.5)
+    #     elif (c=='F'): STDFREC = min(880, STDFREC + 0.5)
+    #     if (c=='v'): vol = max(0,vol - 0.05)
+    #     elif (c=='V'): vol = vol + 0.05
+    #     print("Vol: ", min(maxVol, vol))
+
+    numBloque += 1
+
+setGraphics(bloque)
+plt.show()
+
+kb.set_normal_term()        
+stream.stop()
+exit()
