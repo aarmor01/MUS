@@ -2,24 +2,26 @@ import kbhit
 import sounddevice as sd
 import soundfile as sf
 
+# obtener nota piano.wav
 data, SRATE = sf.read('piano.wav')
 
-# abrimos stream
+# abrir stream
 stream = sd.OutputStream(samplerate=SRATE, 
     channels=len(data.shape))
 
-# arrancamos stream
+# arrancar stream
 stream.start()
 
-# En data tenemos el wav completo, ahora procesamos por bloques (chunks)
 kb = kbhit.KBHit()
 c = ' '
 
+# establecer multiplicador pitch para generar notas en base
+# a la nota base de piano.wav
 scale = [1.0, 1.12, 1.25, 1.33, 1.5, 1.69, 1.88]
 high = [2.0, 2.24, 2.51, 2.66, 2.99, 3.36, 3.78, 4]
 
 while c != '1': 
-    if kb.kbhit():
+    if kb.kbhit(): # notas piano
         c = kb.getch()
         if (c=='q'): sd.play(data, SRATE * scale[0])
         elif (c=='w'): sd.play(data, SRATE * scale[1])
