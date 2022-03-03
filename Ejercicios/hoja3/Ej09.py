@@ -3,7 +3,7 @@ import sounddevice as sd
 import soundfile as sf
 import numpy as np  # arrays    
 
-SRATE = 44100
+SRATE = 44100.0
 CHUNK = 2048
 
 # clase Delay, contiene buffer 
@@ -11,7 +11,7 @@ class Delay:
     def __init__(self, dT):
         self.delayTime = dT
         # generar buffer con tamaño del silencio
-        self.buf = np.zeros(dT * SRATE) 
+        self.buf = np.zeros(int(round(dT * SRATE))) 
 
     def processChunk(self, audioChunk): # procesar chunk
         # obtener chunk a reproducir 
@@ -36,7 +36,7 @@ stream = sd.OutputStream(samplerate=SRATE,
 stream.start()
 
 kb = kbhit.KBHit()
-delay = Delay(3)
+delay = Delay(1)
 numBloque = 0
 c = ' '
 
@@ -46,9 +46,11 @@ while c != 'q':
 
     # nuevo bloque
     bloque = data[numBloque * CHUNK : numBloque * CHUNK + nSamples]
+    if len(bloque) != CHUNK:
+        bloque = np.concatenate((bloque, np.zeros(CHUNK - len(bloque))), axis=0)
 
     # procesar nuevo bloque y retornar bloque a reproducir
-    stream.write(np.float32(delay.processChunk(bloque)))
+    stream.write(np.float32(bloque + delay.processChunk(bloque)))
 
     if kb.kbhit():
         c = kb.getch()

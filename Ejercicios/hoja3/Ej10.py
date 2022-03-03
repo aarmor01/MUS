@@ -11,7 +11,6 @@ class Delay:
     def __init__(self, dT):
         self.delayTime = dT
         self.buf = np.zeros(int(round(dT * SRATE)))
-        print(int(round(dT * SRATE)))
 
     def extractChunk(self):  
         outputChunk = self.buf[:CHUNK]
