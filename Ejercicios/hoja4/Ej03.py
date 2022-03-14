@@ -12,8 +12,8 @@ SRATE = 44100       # sampling rate, Hz, must be integer
 CHUNK = 1024
 
 # creacion de una ventana de pygame
-WIDTH = 64
-HEIGHT = 480
+WIDTH = 480
+HEIGHT = 64
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Theremin")
 
@@ -68,8 +68,6 @@ while c!='q':
     else:
         vol = 0
         fc = 0
-
-
 
     stream.write(np.float32(samples)) 
 
