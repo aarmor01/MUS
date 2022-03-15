@@ -1,128 +1,78 @@
 import numpy as np         # arrays    
 import sounddevice as sd   # modulo de conexión con portAudio
 import soundfile as sf     # para lectura/escritura de wavs
-import kbhit
-import os            
+import kbhit               # para lectura de teclas no bloqueante
 
-SRATE = 44100       # sampling rate, Hz, must be integer
-CHUNK = 1024
+CHANNELS = 1
+CHUNK = 2048
+FADE_TIME = 300
 
+# leemos wav en array numpy (data)
+# por defecto lee en formato dtype="float64". No hay problema para reproducción simple (hace conversiones internas)
+data, SRATE = sf.read('flauta.wav', dtype=np.float64)
+
+# 0,3980 sube
+# 1,045 baja
 class Sampler:
-    def __init__(self, frec):
-        self.frec = frec
-        self.index = 0
-        self.loop = True
+    # constructura de la clase
+    def __init__(self, sample, isLooping):
+        self.sample = np.copy(sample)
+        self.iniSample = int(0.7185 * SRATE)
+        self.endSample = int(1.1280 * SRATE)
+        self.looping = isLooping
+        # compute fade out curve
+        # linear fade in
+        fade_curve = np.linspace(0.0, 1.0, FADE_TIME)
+        # apply the curve
+        self.sample[self.iniSample : self.iniSample + (FADE_TIME)] =  self.sample[self.iniSample : self.iniSample + (FADE_TIME)] * fade_curve
+        # linear fade out
+        fade_curve = np.linspace(1.0, 0.0, FADE_TIME)
+         # apply the curve
+        self.sample[self.endSample - FADE_TIME : self.endSample] =  self.sample[self.endSample - FADE_TIME : self.endSample] * fade_curve
+        plt.plot(self.sample[self.iniSample:self.endSample])
+        plt.show()
+        self.actSample = 0
+    def nextChunk(self):
+        limite = 0
+        if(self.looping and self.actSample + CHUNK > self.endSample):
+            limite = self.endSample
+        else:
+            limite = CHUNK + self.actSample
+        
+        outChunk = self.sample[self.actSample : limite]
 
-    def initNote(self):
-        N = SRATE // int(self.frec) # la frecuencia determina el tamanio del buffer
-        self.buf = np.random.rand(N) * 2 - 1 # buffer inicial: ruido
-        self.init = True
+        print(len(outChunk))
+        if(self.looping and limite == self.endSample):
+            outChunk = np.append(outChunk, self.sample[self.iniSample : self.iniSample + CHUNK - len(outChunk)])
+            self.actSample = self.iniSample + CHUNK - len(outChunk)
+        else:
+            self.actSample += CHUNK 
+        
+        if(len(outChunk) < CHUNK):
+            outChunk = np.append(outChunk, np.zeros(CHUNK - len(outChunk), dtype=np.float32))
+        return outChunk
+    def setLooping(self, bool):
+        self.looping = bool
 
-        nSamples = (int)(SRATE)
-        self.samples = np.empty(nSamples, dtype=np.float64) # salida
-        for i in range(nSamples):
-            #if i >= len(self.buf): break
-            self.samples[i] = self.buf[(i) % N] # recorrido de buffer circular
-            self.buf[i % N] = 0.5 * (self.buf[i % N] 
-                            + self.buf[(1 + i) % N]) # filtrado
+sampler = Sampler(data, True)
+def callbackO(outdata, frames, time, status):
+    outdata[:,0] = sampler.nextChunk()
 
-    def extractChunk(self):
-        # obtener chunk a reproducir 
-        outputChunk = self.samples[:CHUNK]
-        self.samples = self.samples[CHUNK:]
+stream = sd.OutputStream(
+    samplerate = SRATE,            # frec muestreo 
+    blocksize  = CHUNK,            # tamaño del bloque (muy recomendable unificarlo en todo el programa)
+    channels   = 1,
+    dtype = np.float32,
+    callback=callbackO)  # num de canales
 
-        return outputChunk
-
-    def loopNote(self, looping):
-        self.loop = looping
-
-stream = sd.OutputStream(samplerate=SRATE,blocksize=CHUNK,channels=1)  
+# arrancamos stream
 stream.start()
 
 kb = kbhit.KBHit()
-c = ' '
-playedNotes = []
-
-scale = [1.0, 1.12, 1.25, 1.33, 1.5, 1.69, 1.88]
-high = [2.0, 2.24, 2.51, 2.66, 2.99, 3.36, 3.78, 4]
-
-while c!='0':
-    play = np.zeros(CHUNK)
-
-    removeNote = []
-    for elem in range(len(playedNotes)):
-        sample = playedNotes[elem].extractChunk()
-        if len(sample) < CHUNK: 
-            removeNote += elem
-            sample = np.append(sample, np.zeros(CHUNK- len(sample)))
-        play += sample
-
-    for elem in range(len(removeNote)):
-        playedNotes.remove(elem)
-
-    stream.write(np.float32(play))
-
-    if kb.kbhit():
+# bloqueamos ejecucion para recoger respuesta
+while True:
+ if kb.kbhit():
         c = kb.getch()
-        if (c=='q'):
-            ks = KarplusStrong(440 * scale[0])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='w'): 
-            ks = KarplusStrong(440 * scale[1])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='e'): 
-            ks = KarplusStrong(440 * scale[2])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='r'): 
-            ks = KarplusStrong(440 * scale[3])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='t'): 
-            ks = KarplusStrong(440 * scale[4])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='y'): 
-            ks = KarplusStrong(440 * scale[5])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='u'): 
-            ks = KarplusStrong(440 * scale[6])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='z'): 
-            ks = KarplusStrong(440 * high[0])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='x'): 
-            ks = KarplusStrong(440 * high[1])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='c'): 
-            ks = KarplusStrong(440 * high[2])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='v'): 
-            ks = KarplusStrong(440 * high[3])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='b'): 
-            ks = KarplusStrong(440 * high[4])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='n'): 
-            ks = KarplusStrong(440 * high[5])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c=='m'): 
-            ks = KarplusStrong(440 * high[6])
-            ks.initNote()
-            playedNotes.append(ks)
-        if (c==','): 
-            ks = KarplusStrong(440 * high[7])
-            ks.initNote()
-            playedNotes.append(ks)
+        if(c == 'q'): sampler.setLooping(False)
 
-stream.stop()
+kb.set_normal_term()
