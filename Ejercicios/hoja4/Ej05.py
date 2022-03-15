@@ -6,6 +6,7 @@ import os
 
 SRATE = 44100       # sampling rate, Hz, must be integer
 CHUNK = 1024
+A = 220
 
 class KarplusStrong:
     def __init__(self, frec):
@@ -53,75 +54,77 @@ while c!='0':
     for elem in range(len(playedNotes)):
         sample = playedNotes[elem].extractChunk()
         if len(sample) < CHUNK: 
-            removeNote += elem
+            removeNote.append(playedNotes[elem])
             sample = np.append(sample, np.zeros(CHUNK- len(sample)))
         play += sample
 
     for elem in range(len(removeNote)):
-        playedNotes.remove(elem)
+        playedNotes.remove(removeNote[elem])
+
+    removeNote.clear()
 
     stream.write(np.float32(play))
 
     if kb.kbhit():
         c = kb.getch()
         if (c=='q'):
-            ks = KarplusStrong(440 * scale[0])
+            ks = KarplusStrong(A * scale[0])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='w'): 
-            ks = KarplusStrong(440 * scale[1])
+            ks = KarplusStrong(A * scale[1])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='e'): 
-            ks = KarplusStrong(440 * scale[2])
+            ks = KarplusStrong(A * scale[2])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='r'): 
-            ks = KarplusStrong(440 * scale[3])
+            ks = KarplusStrong(A * scale[3])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='t'): 
-            ks = KarplusStrong(440 * scale[4])
+            ks = KarplusStrong(A * scale[4])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='y'): 
-            ks = KarplusStrong(440 * scale[5])
+            ks = KarplusStrong(A * scale[5])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='u'): 
-            ks = KarplusStrong(440 * scale[6])
+            ks = KarplusStrong(A * scale[6])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='z'): 
-            ks = KarplusStrong(440 * high[0])
+            ks = KarplusStrong(A * high[0])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='x'): 
-            ks = KarplusStrong(440 * high[1])
+            ks = KarplusStrong(A * high[1])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='c'): 
-            ks = KarplusStrong(440 * high[2])
+            ks = KarplusStrong(A * high[2])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='v'): 
-            ks = KarplusStrong(440 * high[3])
+            ks = KarplusStrong(A * high[3])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='b'): 
-            ks = KarplusStrong(440 * high[4])
+            ks = KarplusStrong(A * high[4])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='n'): 
-            ks = KarplusStrong(440 * high[5])
+            ks = KarplusStrong(A * high[5])
             ks.initNote()
             playedNotes.append(ks)
         if (c=='m'): 
-            ks = KarplusStrong(440 * high[6])
+            ks = KarplusStrong(A * high[6])
             ks.initNote()
             playedNotes.append(ks)
         if (c==','): 
-            ks = KarplusStrong(440 * high[7])
+            ks = KarplusStrong(A * high[7])
             ks.initNote()
             playedNotes.append(ks)
 
