@@ -54,7 +54,6 @@ while c!='q':
     # samples = oscFM(fc,fm,beta,vol,frame, "square")
     # samples = oscFM(fc,fm,beta,vol,frame, "saw")
     # samples = oscFM(fc,fm,beta,vol,frame, "triangle")
-
     frame += CHUNK
 
     # obtencion de la posicion del raton
