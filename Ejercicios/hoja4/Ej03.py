@@ -1,8 +1,5 @@
-# sintesis fm con osciladores variables
-
 import numpy as np         # arrays    
 import sounddevice as sd   # modulo de conexión con portAudio
-import soundfile as sf     # para lectura/escritura de wavs
 import kbhit
 import os            
 import pygame
@@ -51,9 +48,6 @@ mouseX = -1
 
 while c!='q':
     samples = oscFM(fc,fm,beta,vol,frame, "sin")
-    # samples = oscFM(fc,fm,beta,vol,frame, "square")
-    # samples = oscFM(fc,fm,beta,vol,frame, "saw")
-    # samples = oscFM(fc,fm,beta,vol,frame, "triangle")
     frame += CHUNK
 
     # obtencion de la posicion del raton
@@ -75,16 +69,6 @@ while c!='q':
         c = kb.getch()
         print(c)        
         if c =='q': break
-        # elif c=='C': fc += 1
-        # elif c=='c': fc -= 1    
-        # elif c=='M': fm += 1    
-        # elif c=='m': fm -= 1            
-        # elif c=='B': vol += 0.1    
-        # elif c=='b': vol -= 0.1            
-
-        # print("[C/c] Carrier (pitch): ", fc)
-        # print("[M/m] Frec moduladora: ", fm)
-        # print("[B/b] Factor (beta): ",beta)
         print("q quit")
 
 stream.stop()

@@ -1,8 +1,6 @@
 import numpy as np         # arrays    
 import sounddevice as sd   # modulo de conexión con portAudio
-import soundfile as sf     # para lectura/escritura de wavs
 import kbhit
-import os            
 
 SRATE = 44100       # sampling rate, Hz, must be integer
 CHUNK = 1024
@@ -15,6 +13,7 @@ class KarplusStrong:
         self.init = False
 
     def initNote(self):
+        # síntesis
         N = SRATE // int(self.frec) # la frecuencia determina el tamanio del buffer
         self.buf = np.random.rand(N) * 2 - 1 # buffer inicial: ruido
         self.init = True
@@ -22,7 +21,6 @@ class KarplusStrong:
         nSamples = (int)(SRATE)
         self.samples = np.empty(nSamples, dtype=np.float64) # salida
         for i in range(nSamples):
-            #if i >= len(self.buf): break
             self.samples[i] = self.buf[(i) % N] # recorrido de buffer circular
             self.buf[i % N] = 0.5 * (self.buf[i % N] 
                             + self.buf[(1 + i) % N]) # filtrado
@@ -51,6 +49,8 @@ while c!='0':
     play = np.zeros(CHUNK)
 
     removeNote = []
+
+    # saca un chunk de cada nota y las suma en play
     for elem in range(len(playedNotes)):
         sample = playedNotes[elem].extractChunk()
         if len(sample) < CHUNK: 
@@ -65,6 +65,7 @@ while c!='0':
 
     stream.write(np.float32(play))
 
+    # notas
     if kb.kbhit():
         c = kb.getch()
         if (c=='q'):

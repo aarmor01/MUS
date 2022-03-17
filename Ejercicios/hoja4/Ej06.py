@@ -5,22 +5,19 @@ import kbhit               # para lectura de teclas no bloqueante
 
 CHANNELS = 1
 CHUNK = 2048
-FADE_TIME = 300
 
-
-# 0,3980 sube
-# 1,045 baja
 class Sampler:
     # constructura de la clase
     def __init__(self, sample, start, end, isLooping):
         self.sampleAudio = np.copy(sample)
-        self.startLoop = start
+        self.startLoop = start # bordes del loop
         self.endLoop = end
         self.isLooping = isLooping
         self.index = 0
 
     def nextChunk(self):
-        if not self.isLooping:
+        # si no loopea, procedemos de manera natural
+        if not self.isLooping: 
             samples = CHUNK
             if CHUNK > len(self.sampleAudio):
                 samples = samples - (CHUNK - len(self.sampleAudio))
@@ -33,13 +30,15 @@ class Sampler:
             self.index += samples
             return outChunk
 
+        # si loopea
         else:
             end = 0
             if self.index + CHUNK > self.endLoop: end = self.endLoop
             else: end = self.index + CHUNK
 
-            outChunk = self.sampleAudio[self.index : end]
+            outChunk = self.sampleAudio[self.index : end] # obtenemos chunk
 
+             # si hemos llegado al final del loop, rellenamos desde el principio lo que corresponda
             if end == self.endLoop:
                 self.index = self.startLoop + (CHUNK - len(outChunk))
                 outChunk = np.append(outChunk, self.sampleAudio[self.startLoop : self.index])
@@ -50,24 +49,23 @@ class Sampler:
         
     def setLooping(self, loop):
         self.isLooping = loop
-        if self.isLooping: 
+        if self.isLooping: # si establecemos loop, reseteamos indice como corresponda
             if self.index >= len(self.sampleAudio): self.index = 0
             else: self.index = self.startLoop
         else: self.index = self.startLoop
 
-# leemos wav en array numpy (data)
-# por defecto lee en formato dtype="float64". No hay problema para reproducción simple (hace conversiones internas)
 data, SRATE = sf.read('flauta.wav', dtype=np.float64)
 
-sampler = Sampler(data,  23896, 44134, False)
+                        # ini  fin
+sampler = Sampler(data, 23896, 44134, False)
 def callbackO(outdata, frames, time, status):
     outdata[:,0] = sampler.nextChunk()
 
-stream = sd.OutputStream(samplerate = SRATE,            # frec muestreo 
-    blocksize = CHUNK,                                  # tamaño del bloque (muy recomendable unificarlo en todo el programa)
+stream = sd.OutputStream(samplerate = SRATE,            
+    blocksize = CHUNK,                                  
     channels = 1,
     dtype = np.float32,
-    callback=callbackO)                                 # num de canales
+    callback=callbackO)                                 
 
 # arrancamos stream
 stream.start()
