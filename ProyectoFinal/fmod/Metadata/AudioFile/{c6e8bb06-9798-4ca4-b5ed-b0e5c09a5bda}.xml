@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{c6e8bb06-9798-4ca4-b5ed-b0e5c09a5bda}">
+		<property name="assetPath">
+			<value>One Piece OST_ OVERTAKEN「Drums of Liberation Music」_ EPIC VERSION.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>231.22430839002268</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{464ef1db-116d-4739-aafd-216865a23487}</destination>
+		</relationship>
+	</object>
+</objects>
