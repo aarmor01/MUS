@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<objects serializationModel="Studio.02.01.00">
+<objects serializationModel="Studio.02.02.00">
 	<object class="ParameterPreset" id="{f8993b6b-21ea-402e-9c7a-634524dfa3b1}">
 		<property name="name">
 			<value>Enemies</value>
@@ -12,9 +12,6 @@
 		</relationship>
 	</object>
 	<object class="GameParameter" id="{3f144e7c-d0eb-4b96-b65d-a0b0598a37b9}">
-		<property name="parameterType">
-			<value>1</value>
-		</property>
 		<property name="maximum">
 			<value>6</value>
 		</property>

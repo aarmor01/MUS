@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4038585769916156850}
   - component: {fileID: 4174772160510140504}
   - component: {fileID: 4092135082584102322}
+  - component: {fileID: 7986371527554154406}
   - component: {fileID: 4087890735612402798}
   m_Layer: 0
   m_Name: FirstPerson-AIO
@@ -161,6 +162,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7986371527554154406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4118568370049380520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e16ac2c0f98bc584d98995a62b26824e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHP: 0
 --- !u!114 &4087890735612402798
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ public class SeePlayer : MonoBehaviour
     void Start()
     {
         seeingPlayer_ = false;
+        eventEmitter_.EventInstance.setParameterByName("Health", 100.0f);
     }
 
     // Update is called once per frame
@@ -23,20 +24,23 @@ public class SeePlayer : MonoBehaviour
         // Bit shift the index of the layer (8) to get a bit mask
         int layerMask = 1 << 8;
 
-        // This would cast rays only against colliders in layer 8.
-        // But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
-        //layerMask = ~layerMask;
+        if (seeingPlayer_)
+        {
+            float playerHP = playerTr_.gameObject.GetComponent<HealthBar>().subtractHP(0.1f);
+            eventEmitter_.EventInstance.setParameterByName("Health", playerHP);
+        }
+
 
         RaycastHit hit;
-        // Does the ray intersect any objects excluding the player layer
+        // Does the ray intersect the player layer
         if (Physics.Raycast(transform.position, playerTr_.position - transform.position, out hit, 25, layerMask) && hit.transform.gameObject.tag == "Player")
         {
             if (!seeingPlayer_)
             {
-                Debug.Log("Did Hit");
                 GameManager.instance.addEnemy();
                 eventEmitter_.EventInstance.setParameterByName("Enemies", GameManager.instance.getEnemyNumber());
                 seeingPlayer_ = true;
+                GameManager.instance.setHeal(false);
             }
 
         }
@@ -45,7 +49,7 @@ public class SeePlayer : MonoBehaviour
             GameManager.instance.subtractEnemy();
             eventEmitter_.EventInstance.setParameterByName("Enemies", GameManager.instance.getEnemyNumber());
             seeingPlayer_ = false;
-            Debug.Log("Didn't Hit");
+            GameManager.instance.setHeal(true);
         }
 
         Debug.DrawRay(transform.position, playerTr_.position - transform.position, Color.yellow);
