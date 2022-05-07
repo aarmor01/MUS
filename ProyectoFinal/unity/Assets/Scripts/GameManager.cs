@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-
     int enemyNumber_;
     bool canHeal_, healEnabled_;
 
@@ -46,9 +46,14 @@ public class GameManager : MonoBehaviour
                 healTimer_ = maxHealTime_;
             }
         }
-        Debug.Log(healTimer_);
+        //Debug.Log(enemyNumber_);
     }
 
+    public void restartScene()
+    {
+        enemyNumber_ = 0;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
     public void addEnemy()
     {
         enemyNumber_++;
@@ -67,7 +72,7 @@ public class GameManager : MonoBehaviour
     }
     public void setHeal(bool val)
     {
-        if (val)
+        if (val && enemyNumber_ <= 0)
         {
             healTimer_ = maxHealTime_;
             healEnabled_ = true;
