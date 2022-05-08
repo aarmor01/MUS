@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748171, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -665,11 +665,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: -1354258554
-      Data2: 1299079605
-      Data3: -1042822759
-      Data4: 384733671
-    Path: event:/TestEvent
+      Data1: 1427755826
+      Data2: 1140761820
+      Data3: 1052259208
+      Data4: -515024287
+    Path: event:/FinalProj
   Event: 
   PlayEvent: 1
   StopEvent: 2
@@ -847,7 +847,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: Restart
 --- !u!222 &735021412
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1985,6 +1985,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4087890735612402798, guid: 960507e5df6405443bd59dbb52e4528c, type: 3}
+      propertyPath: drawStaminaMeter
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4087890735612402798, guid: 960507e5df6405443bd59dbb52e4528c, type: 3}
+      propertyPath: advanced.maxSlopeAngle
+      value: 55
+      objectReference: {fileID: 0}
     - target: {fileID: 4116826002791623042, guid: 960507e5df6405443bd59dbb52e4528c, type: 3}
       propertyPath: m_RootOrder
       value: 5

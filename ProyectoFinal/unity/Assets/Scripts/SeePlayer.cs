@@ -40,9 +40,13 @@ public class SeePlayer : MonoBehaviour
 
             if (shootTimer_ <= 0.0f)
             {
-                //Quiamos vida
+                //Quitamos vida
                 float playerHP = playerTr_.gameObject.GetComponent<HealthBar>().subtractHP(Random.Range(minDamage_, maxDamage_));
                 eventEmitter_.EventInstance.setParameterByName("Health", playerHP);
+
+                if (playerHP <= 0.0f)
+                    this.enabled = false;
+
                 shootTimer_ = Random.Range(2.0f, 5.0f);
 
                 //Feedback auditivo

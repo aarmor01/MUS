@@ -720,7 +720,9 @@ public class FirstPersonAIO : MonoBehaviour {
 
     private void OnDisable()
     {
-        
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = controllerPauseState;
+        fps_Rigidbody.velocity = new Vector3(0, 0, 0);
     }
 
     public IEnumerator CameraShake(float Duration, float Magnitude){

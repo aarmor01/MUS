@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{be6a80ba-7c3c-4d5b-9ae5-69a375b841e7}">
+		<property name="assetPath">
+			<value>CombatExtraFinal.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>10</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{464ef1db-116d-4739-aafd-216865a23487}</destination>
+		</relationship>
+	</object>
+</objects>
