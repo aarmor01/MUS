@@ -25,7 +25,6 @@ public class SeePlayer : MonoBehaviour
     {
         seeingPlayer_ = false;
         matTimerRunning_ = false;
-        eventEmitter_.EventInstance.setParameterByName("Health", 100.0f);
         IdleMaterial_ = GetComponent<Renderer>().material;
     }
 

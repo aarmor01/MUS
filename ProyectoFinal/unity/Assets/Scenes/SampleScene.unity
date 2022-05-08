@@ -2078,6 +2078,10 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7986371527554154406, guid: 960507e5df6405443bd59dbb52e4528c, type: 3}
+      propertyPath: eventEmitter_
+      value: 
+      objectReference: {fileID: 634671808}
+    - target: {fileID: 7986371527554154406, guid: 960507e5df6405443bd59dbb52e4528c, type: 3}
       propertyPath: resstartButt_
       value: 
       objectReference: {fileID: 95847549}
