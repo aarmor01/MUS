@@ -718,7 +718,10 @@ public class FirstPersonAIO : MonoBehaviour {
         #endregion
     }
 
- 
+    private void OnDisable()
+    {
+        
+    }
 
     public IEnumerator CameraShake(float Duration, float Magnitude){
         float elapsed =0;

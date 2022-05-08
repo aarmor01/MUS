@@ -385,6 +385,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTr_: {fileID: 2089359903}
   eventEmitter_: {fileID: 634671808}
+  shotAudioPath_: event:/Gunshot
+  spottedMaterial_: {fileID: 2100000, guid: f311cbaee5c260a4ba83b75109f10bca, type: 2}
+  attackMaterial_: {fileID: 2100000, guid: 49a2b098aaddd914892c8acc34803df3, type: 2}
 --- !u!136 &409597250
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -418,7 +421,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 49a2b098aaddd914892c8acc34803df3, type: 2}
+  - {fileID: 2100000, guid: b885d8f7cc92bcb45b1cf37dd4f258ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -595,7 +598,7 @@ Transform:
   - {fileID: 2067451457}
   - {fileID: 783821273}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &634671805
 GameObject:
@@ -878,7 +881,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771432510}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 275.01434, y: 980.1966, z: 509.12332}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1426,7 +1429,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1462954663
 GameObject:
@@ -1553,7 +1556,7 @@ Transform:
   - {fileID: 1161861492}
   - {fileID: 1462954667}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1595736156
 GameObject:
@@ -1608,7 +1611,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 49a2b098aaddd914892c8acc34803df3, type: 2}
+  - {fileID: 2100000, guid: b885d8f7cc92bcb45b1cf37dd4f258ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1666,6 +1669,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTr_: {fileID: 2089359903}
   eventEmitter_: {fileID: 634671808}
+  shotAudioPath_: event:/Gunshot
+  spottedMaterial_: {fileID: 2100000, guid: f311cbaee5c260a4ba83b75109f10bca, type: 2}
+  attackMaterial_: {fileID: 2100000, guid: 49a2b098aaddd914892c8acc34803df3, type: 2}
 --- !u!1 &1657385194
 GameObject:
   m_ObjectHideFlags: 0
@@ -1771,7 +1777,7 @@ Transform:
   - {fileID: 409597253}
   - {fileID: 1595736160}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1944597029 stripped
 GameObject:
@@ -1981,7 +1987,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4116826002791623042, guid: 960507e5df6405443bd59dbb52e4528c, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4116826002791623042, guid: 960507e5df6405443bd59dbb52e4528c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2099,7 +2105,7 @@ Transform:
   - {fileID: 891528076}
   - {fileID: 156148965}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5252240279309384502
 PrefabInstance:
@@ -2118,15 +2124,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5252240278850690259, guid: f389106864236f54c9d3e195dfe85292, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 64.00593
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5252240278850690259, guid: f389106864236f54c9d3e195dfe85292, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.529434
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5252240278850690259, guid: f389106864236f54c9d3e195dfe85292, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.4877396
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5252240278850690259, guid: f389106864236f54c9d3e195dfe85292, type: 3}
       propertyPath: m_LocalRotation.w
