@@ -776,7 +776,7 @@
 	</object>
 	<object class="TransitionMarker" id="{6ac6b92e-523f-4682-bf71-7f3e6b4dd660}">
 		<property name="position">
-			<value>5</value>
+			<value>4.4169160997732426</value>
 		</property>
 		<relationship name="timeline">
 			<destination>{dd01c80b-2040-4de5-af83-2f665d43035f}</destination>
@@ -963,7 +963,7 @@
 			<value>1</value>
 		</property>
 		<property name="maximum">
-			<value>5</value>
+			<value>6</value>
 		</property>
 		<relationship name="parameter">
 			<destination>{3f144e7c-d0eb-4b96-b65d-a0b0598a37b9}</destination>
@@ -996,7 +996,7 @@
 			<value>1</value>
 		</property>
 		<property name="maximum">
-			<value>5</value>
+			<value>6</value>
 		</property>
 		<relationship name="parameter">
 			<destination>{3f144e7c-d0eb-4b96-b65d-a0b0598a37b9}</destination>
